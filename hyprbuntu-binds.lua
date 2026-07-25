@@ -1,8 +1,22 @@
 -- Notifications (swaync)
 hl.bind("SUPER + COMMA", hl.dsp.exec_cmd("swaync-client --close-latest"), { description = "Dismiss last notification" })
-hl.bind("SUPER + SHIFT + COMMA", hl.dsp.exec_cmd("swaync-client --close-all"), { description = "Dismiss all notifications" })
-hl.bind("SUPER + CTRL + COMMA", hl.dsp.exec_cmd("swaync-client --toggle-panel"), { description = "Open notifications panel" })
-hl.bind("SUPER + ALT + COMMA", hl.dsp.exec_cmd("swaync-client --toggle-dnd && swaync-client --get-dnd | grep -q 'true' && notify-send 'Silenced notifications' || notify-send 'Enabled notifications'"), { description = "Toggle silencing notifications" })
+hl.bind(
+	"SUPER + SHIFT + COMMA",
+	hl.dsp.exec_cmd("swaync-client --close-all"),
+	{ description = "Dismiss all notifications" }
+)
+hl.bind(
+	"SUPER + CTRL + COMMA",
+	hl.dsp.exec_cmd("swaync-client --toggle-panel"),
+	{ description = "Open notifications panel" }
+)
+hl.bind(
+	"SUPER + ALT + COMMA",
+	hl.dsp.exec_cmd(
+		"swaync-client --toggle-dnd && swaync-client --get-dnd | grep -q 'true' && notify-send 'Silenced notifications' || notify-send 'Enabled notifications'"
+	),
+	{ description = "Toggle silencing notifications" }
+)
 
 -- Screenshots
 local hyprshot = os.getenv("HOME") .. "/.local/bin/hyprshot"
@@ -25,4 +39,3 @@ hl.bind("SHIFT + PRINT", hl.dsp.exec_cmd(hyprshot .. " -m output"), { descriptio
 
 --hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("swayosd-client --brightness raise"), { locked = true, repeating = true, description = "Brightness up" })
 --hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("swayosd-client --brightness lower"), { locked = true, repeating = true, description = "Brightness down" })
-
