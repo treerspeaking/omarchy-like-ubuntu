@@ -16,6 +16,9 @@
 -- Create your files separately and then require them like this:
 -- require("myColors")
 
+-- Omarchy "ristretto" palette, see themes/ristretto/colors.toml
+local colors = require("colors")
+
 ------------------
 ---- MONITORS ----
 ------------------
@@ -92,7 +95,7 @@ hl.config({
 		border_size = 2,
 
 		col = {
-			active_border = { colors = { "rgba(33ccffee)", "rgba(00ff99ee)" }, angle = 45 },
+			active_border = colors.accent,
 			inactive_border = "rgba(595959aa)",
 		},
 
@@ -117,7 +120,7 @@ hl.config({
 			enabled = true,
 			range = 4,
 			render_power = 3,
-			color = 0xee1a1a1a,
+			color = "rgba(181414ee)",
 		},
 
 		blur = {
@@ -183,6 +186,16 @@ hl.animation({ leaf = "zoomFactor", enabled = true, speed = 7, bezier = "quick" 
 hl.config({
 	dwindle = {
 		preserve_split = true, -- You probably want this
+	},
+})
+
+-- Group (tabbed) borders, matching the window borders above
+hl.config({
+	group = {
+		col = {
+			border_active = colors.accent,
+			border_inactive = "rgba(595959aa)",
+		},
 	},
 })
 
