@@ -23,6 +23,7 @@ local hyprshot = os.getenv("HOME") .. "/.local/bin/hyprshot"
 hl.bind("PRINT", hl.dsp.exec_cmd(hyprshot .. " -m region"), { description = "Region screenshot" })
 hl.bind("ALT + PRINT", hl.dsp.exec_cmd(hyprshot .. " -m window"), { description = "Window screenshot" })
 hl.bind("SHIFT + PRINT", hl.dsp.exec_cmd(hyprshot .. " -m output"), { description = "Monitor screenshot" })
+hl.bind("SUPER + SHIFT + S", hl.dsp.exec_cmd(hyprshot .. " -m region"), { description = "Region screenshot" })
 
 -- Multimedia keys for media, volume and screen brightness (with SwayOSD)
 -- These have been disabled since the default ~/.config/hypr/hyprland.lua already binds these

@@ -25,10 +25,10 @@ local colors = require("colors")
 
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
 hl.monitor({
-	output = "",
-	mode = "preferred",
+	output = "HDMI-A-1",
+	mode = "1920x1080@144",
 	position = "auto",
-	scale = "auto",
+	scale = 1,
 })
 
 ---------------------
@@ -37,8 +37,9 @@ hl.monitor({
 
 -- Set programs that you use
 local terminal = "kitty"
-local fileManager = "dolphin"
+local fileManager = "nautilus"
 local menu = "hyprlauncher"
+local browser = "microsoft-edge"
 
 -------------------
 ---- AUTOSTART ----
@@ -63,6 +64,38 @@ local menu = "hyprlauncher"
 
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
+
+----------------
+---- CURSOR ----
+----------------
+
+-- WORKAROUND (added 2026-08-02) -- remove once Hyprland/aquamarine or the NVIDIA
+-- driver fixes this upstream. Verify by deleting this block, relogging via GDM,
+-- and checking whether a ghost cursor is left on screen.
+--
+-- Symptom: logging in through GDM leaves a permanent, inert copy of the cursor
+-- drawn at the position GDM last had it. The real cursor works fine -- they are
+-- two separate layers.
+--
+-- Cause: no_hardware_cursors defaults to "auto", and auto turns hardware cursors
+-- OFF on NVIDIA. Hyprland then composites the cursor into the frame and never
+-- programs the DRM cursor plane, so the buffer mutter left on that plane keeps
+-- being scanned out forever.
+--
+-- Fix: force hardware cursors back on so the plane gets overwritten every move.
+-- use_cpu_buffer is what makes that safe on NVIDIA -- it puts a dumb CPU buffer
+-- on the cursor plane instead of a GBM one, avoiding the flicker/lag that made
+-- "auto" disable hardware cursors on NVIDIA in the first place.
+--
+-- Seen on: Hyprland 0.55.4, NVIDIA 595.71.05, RTX 5070 driving HDMI-A-1.
+hl.config({
+	cursor = {
+		no_hardware_cursors = false,
+		use_cpu_buffer = true,
+		inactive_timeout = 5,
+		hide_on_key_press = true,
+	},
+})
 
 -----------------------
 ----- PERMISSIONS -----
@@ -268,8 +301,9 @@ local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 require("hyprbuntu-binds")
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
-hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
-local closeWindowBind = hl.bind(mainMod .. " + C", hl.dsp.window.close())
+hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
+hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(browser))
+local closeWindowBind = hl.bind(mainMod .. " + W", hl.dsp.window.close())
 -- closeWindowBind:set_enabled(false)
 -- hl.bind(
 -- 	mainMod .. " + M",
@@ -299,7 +333,7 @@ end
 
 -- Example special workspace (scratchpad)
 hl.bind(mainMod .. " + S", hl.dsp.workspace.toggle_special("magic"))
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }))
+hl.bind(mainMod .. " + ALT + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }))
 
 -- Scroll through existing workspaces with mainMod + scroll
 hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
